@@ -43,6 +43,8 @@ for i in range(5):
 for i in range(5):
     Block("asset_level/big_stick.png", 150,250)
 
+selected_block = None
+off_x, off_y = 0, 0
 
 # Ігровий цикл
 while True:
@@ -51,6 +53,25 @@ while True:
     for e in event.get():
         if e.type == QUIT:
             quit()
+        if e.type == MOUSEBUTTONDOWN:
+            x, y = e.pos
+            for block in blocks:
+
+                if block.rect.collidepoint(x,y):
+                    selected_block = block
+
+                    off_x = x - block.rect.x
+                    off_y = y - block.rect.y
+                    break
+
+        if e.type == MOUSEBUTTONUP:
+            selected_block = None
+
+        if e.type == MOUSEMOTION and selected_block:
+            x, y = e.pos
+
+            selected_block.rect.x = x - off_x
+            selected_block.rect.y = y - off_y
 
     # 2 - Малювання усіх об'єктів на екрані
     for block in blocks:
