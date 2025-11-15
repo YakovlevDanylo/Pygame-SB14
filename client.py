@@ -18,6 +18,7 @@ f = font.Font(None, 20)
 all_players = []
 running = True
 lose = False
+name = "Anton"
 
 def receive_data():
     global all_players, running, lose
@@ -28,7 +29,7 @@ def receive_data():
                 lose = True
             elif data:
                 parts = data.strip('|').split('|')
-                all_players = [list(map(int, p.split(','))) for p in parts if len(p.split(',')) == 4]
+                all_players = [list(map(int, p.split(',')[0:4]) + [p.split(",")[-1]]) for p in parts if len(p.split(',')) == 5]
         except:
                 pass
 
@@ -67,6 +68,7 @@ while running:
     draw.circle(window,(0,255,0),(500,500), int(my_player[2] * scale))
 
     to_remove = []
+    to_remove = []
     for eat in eats:
         if eat.check_collision(my_player[0],my_player[1],my_player[2]):
             to_remove.append(eat)
@@ -94,7 +96,7 @@ while running:
         if keys[K_d]: my_player[0] += 15
 
         try:
-            msg = f"{my_id}, {my_player[0]}, {my_player[1]}, {my_player[2]}"
+            msg = f"{my_id}, {my_player[0]}, {my_player[1]}, {my_player[2]}, {name}"
             sock.send(msg.encode())
         except:
             pass
